@@ -1,5 +1,6 @@
 import { Box, Typography, IconButton, Badge, Divider } from '@mui/material'
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined'
+import { colors } from '../theme'
 
 export default function TopBar() {
   return (
@@ -9,8 +10,8 @@ export default function TopBar() {
         display: 'flex',
         alignItems: 'center',
         px: 3,
-        bgcolor: '#1A0F0A',
-        color: '#F5EDE3',
+        bgcolor: colors.brown,
+        color: colors.beige,
         borderBottom: '1px solid rgba(245, 237, 227, 0.08)',
         flexShrink: 0,
       }}
@@ -24,7 +25,7 @@ export default function TopBar() {
           fontWeight: 600,
           letterSpacing: 3,
           textTransform: 'uppercase',
-          color: '#F5EDE3',
+          color: colors.beige,
         }}
       >
         Ric's Diner
@@ -36,12 +37,12 @@ export default function TopBar() {
           flexItem
           sx={{ height: 28, borderColor: 'rgba(245, 237, 227, 0.2)', my: 'auto' }}
         />
-        <IconButton sx={{ color: '#F5EDE3' }}>
+        <IconButton sx={{ color: colors.beige }}>
           <Badge badgeContent={0} color="error" sx={{ '& .MuiBadge-badge': { fontSize: 10, minWidth: 16, height: 16 } }}>
             <ShoppingCartOutlinedIcon />
           </Badge>
         </IconButton>
-        <Typography sx={{ fontSize: 13, color: '#F5EDE3', fontWeight: 500, mr: 1 }}>
+        <Typography sx={{ fontSize: 13, color: colors.beige, fontWeight: 500, mr: 1 }}>
           購物車
         </Typography>
       </Box>
