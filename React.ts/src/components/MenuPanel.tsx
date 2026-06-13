@@ -110,8 +110,8 @@ export default function MenuPanel({ onSelectItem, selectedCode }: Props) {
             },
           }}
         >
-          {allTabs.map((tab, i) => (
-            <Tab key={i} label={tab.label} />
+          {allTabs.map(tab => (
+            <Tab key={tab.value} label={tab.label} />
           ))}
         </Tabs>
       </Box>

@@ -16,9 +16,15 @@ function seededHash(s: string): number {
 
 interface Props {
   selectedItem: MenuItem | ComboItem | null
+  onAddToCart: (item: MenuItem | ComboItem) => void
 }
 
-export default function DetailPanel({ selectedItem }: Props) {
+const overlayTagSx = {
+  px: 1.5, py: 0.3, borderRadius: 1,
+  bgcolor: 'rgba(255,255,255,0.15)', fontSize: 11, color: colors.white,
+}
+
+export default function DetailPanel({ selectedItem, onAddToCart }: Props) {
   const imageUrl = useMemo(() => {
     if (!selectedItem || !isMenuItem(selectedItem)) return null
     const code = selectedItem.code
@@ -105,14 +111,10 @@ export default function DetailPanel({ selectedItem }: Props) {
           {(dietLabel || (spiciness && spiciness !== '不辣')) && (
             <Box sx={{ display: 'flex', gap: 1, mt: 1 }}>
               {dietLabel && (
-                <Box sx={{ px: 1.5, py: 0.3, borderRadius: 1, bgcolor: 'rgba(255,255,255,0.15)', fontSize: 11, color: colors.white }}>
-                  {dietLabel}
-                </Box>
+                <Box sx={overlayTagSx}>{dietLabel}</Box>
               )}
               {spiciness && spiciness !== '不辣' && (
-                <Box sx={{ px: 1.5, py: 0.3, borderRadius: 1, bgcolor: 'rgba(255,255,255,0.15)', fontSize: 11, color: colors.white }}>
-                  {spiciness}
-                </Box>
+                <Box sx={overlayTagSx}>{spiciness}</Box>
               )}
             </Box>
           )}
@@ -125,6 +127,7 @@ export default function DetailPanel({ selectedItem }: Props) {
       {selectedItem && (
         <Fab
           variant="extended"
+          onClick={() => onAddToCart(selectedItem)}
           sx={{
             position: 'absolute',
             bottom: 24,

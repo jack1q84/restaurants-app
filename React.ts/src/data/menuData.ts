@@ -19,10 +19,6 @@ export function isMenuItem(item: MenuItem | ComboItem): item is MenuItem {
   return 'category' in item
 }
 
-export function isComboItem(item: MenuItem | ComboItem): item is ComboItem {
-  return !isMenuItem(item)
-}
-
 type RawRow = [string, string, string, string, string, string, string]
 
 const rawData: RawRow[] = [
@@ -146,6 +142,10 @@ export const combos: ComboItem[] = [
 ]
 
 export const categories: string[] = [...new Set(menuItems.map(i => i.category))]
+
+export const itemPriceMap: Record<string, number> = Object.fromEntries(
+  [...menuItems, ...combos].map(i => [i.code, i.price]),
+)
 
 export const imageFiles: string[] = [
   "QC-004", "SL-011", "TP-021", "YDL-025", "DF-038", "BS-045", "TD-093"
