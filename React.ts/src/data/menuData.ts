@@ -15,7 +15,17 @@ export interface ComboItem {
   price: number
 }
 
-const rawData: string[][] = [
+export function isMenuItem(item: MenuItem | ComboItem): item is MenuItem {
+  return 'category' in item
+}
+
+export function isComboItem(item: MenuItem | ComboItem): item is ComboItem {
+  return !isMenuItem(item)
+}
+
+type RawRow = [string, string, string, string, string, string, string]
+
+const rawData: RawRow[] = [
   ["QC-001","前菜","凱薩沙拉佐帕瑪森脆片","蘿蔓生菜·帕瑪森起司·酥炸酸豆·檸檬油醋","含麩質","不辣","280"],
   ["QC-002","前菜","煙燻鮭魚玫瑰花","蘇格蘭煙燻鮭魚·酸豆·洋蔥絲·檸檬汁","無麩質","不辣","380"],
   ["QC-003","前菜","義式炸魷魚","新鮮魷魚·義大利麵粉·檸檬·塔塔醬","含麩質","不辣","320"],
