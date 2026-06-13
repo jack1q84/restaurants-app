@@ -147,6 +147,10 @@ export const itemPriceMap: Record<string, number> = Object.fromEntries(
   [...menuItems, ...combos].map(i => [i.code, i.price]),
 )
 
+export const allItems: Record<string, MenuItem | ComboItem> = Object.fromEntries(
+  [...menuItems, ...combos].map(i => [i.code, i]),
+)
+
 export const imageFiles: string[] = [
   "QC-004", "SL-011", "TP-021", "YDL-025", "DF-038", "BS-045", "TD-093"
 ]

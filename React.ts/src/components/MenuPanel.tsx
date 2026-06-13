@@ -43,7 +43,7 @@ export default function MenuPanel({ onSelectItem, selectedCode }: Props) {
     if (currentTab.kind === 'combo') return combos
     if (currentTab.kind === 'vegetarian') {
       return menuItems.filter(i =>
-        i.dietLabel.includes('素') || i.dietLabel.includes('純素')
+        i.dietLabel.includes('素')
       )
     }
     return menuItems.filter(i => i.category === currentTab.value)

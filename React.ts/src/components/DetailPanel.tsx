@@ -88,65 +88,64 @@ export default function DetailPanel({ selectedItem, onAddToCart }: Props) {
       )}
 
       {selectedItem && (
-        <Box
-          sx={{
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            right: 0,
-            background: 'linear-gradient(transparent, rgba(0,0,0,0.7))',
-            px: 4,
-            pb: 10,
-            pt: 6,
-          }}
-        >
-          <Typography sx={{ fontSize: 28, fontWeight: 700, color: colors.white }}>
-            {name}
-          </Typography>
-          {description && (
-            <Typography sx={{ fontSize: 14, color: 'rgba(255,255,255,0.7)', mt: 0.5 }}>
-              {description}
+        <>
+          <Box
+            sx={{
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              right: 0,
+              background: 'linear-gradient(transparent, rgba(0,0,0,0.7))',
+              px: 4,
+              pb: 10,
+              pt: 6,
+            }}
+          >
+            <Typography sx={{ fontSize: 28, fontWeight: 700, color: colors.white }}>
+              {name}
             </Typography>
-          )}
-          {(dietLabel || (spiciness && spiciness !== '不辣')) && (
-            <Box sx={{ display: 'flex', gap: 1, mt: 1 }}>
-              {dietLabel && (
-                <Box sx={overlayTagSx}>{dietLabel}</Box>
-              )}
-              {spiciness && spiciness !== '不辣' && (
-                <Box sx={overlayTagSx}>{spiciness}</Box>
-              )}
-            </Box>
-          )}
-          <Typography sx={{ fontSize: 28, fontWeight: 700, color: colors.white, mt: 1 }}>
-            ${price.toLocaleString()}
-          </Typography>
-        </Box>
-      )}
-
-      {selectedItem && (
-        <Fab
-          variant="extended"
-          onClick={() => onAddToCart(selectedItem)}
-          sx={{
-            position: 'absolute',
-            bottom: 24,
-            right: 24,
-            bgcolor: colors.brownDark,
-            color: colors.beige,
-            fontWeight: 600,
-            fontSize: 15,
-            px: 3,
-            borderRadius: 28,
-            boxShadow: '0 4px 16px rgba(0,0,0,0.3)',
-            '&:hover': { bgcolor: colors.brownLight },
-            textTransform: 'none',
-            gap: 1,
-          }}
-        >
-          <AddShoppingCartOutlinedIcon sx={{ fontSize: 20 }} />
-          加入購物車
-        </Fab>
+            {description && (
+              <Typography sx={{ fontSize: 14, color: 'rgba(255,255,255,0.7)', mt: 0.5 }}>
+                {description}
+              </Typography>
+            )}
+            {(dietLabel || (spiciness && spiciness !== '不辣')) && (
+              <Box sx={{ display: 'flex', gap: 1, mt: 1 }}>
+                {dietLabel && (
+                  <Box sx={overlayTagSx}>{dietLabel}</Box>
+                )}
+                {spiciness && spiciness !== '不辣' && (
+                  <Box sx={overlayTagSx}>{spiciness}</Box>
+                )}
+              </Box>
+            )}
+            <Typography sx={{ fontSize: 28, fontWeight: 700, color: colors.white, mt: 1 }}>
+              ${price.toLocaleString()}
+            </Typography>
+          </Box>
+          <Fab
+            variant="extended"
+            onClick={() => onAddToCart(selectedItem)}
+            sx={{
+              position: 'absolute',
+              bottom: 24,
+              right: 24,
+              bgcolor: colors.brownDark,
+              color: colors.beige,
+              fontWeight: 600,
+              fontSize: 15,
+              px: 3,
+              borderRadius: 28,
+              boxShadow: '0 4px 16px rgba(0,0,0,0.3)',
+              '&:hover': { bgcolor: colors.brownLight },
+              textTransform: 'none',
+              gap: 1,
+            }}
+          >
+            <AddShoppingCartOutlinedIcon sx={{ fontSize: 20 }} />
+            加入購物車
+          </Fab>
+        </>
       )}
     </Box>
   )

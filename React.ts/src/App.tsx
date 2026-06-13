@@ -1,29 +1,30 @@
 import { Box, CssBaseline, ThemeProvider } from '@mui/material'
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback, useRef, useEffect } from 'react'
 import TopBar from './components/TopBar'
 import MenuPanel from './components/MenuPanel'
 import DetailPanel from './components/DetailPanel'
 import CartDialog from './components/CartDialog'
+import CartReview from './components/CartReview'
+import OrderSuccessDialog from './components/OrderSuccessDialog'
 import { theme } from './theme'
-import { itemPriceMap, isMenuItem } from './data/menuData'
+import { itemPriceMap, allItems, isMenuItem } from './data/menuData'
 import type { MenuItem, ComboItem } from './data/menuData'
 
 export default function App() {
   const [selectedItem, setSelectedItem] = useState<MenuItem | ComboItem | null>(null)
   const [cart, setCart] = useState<Record<string, number>>({})
+  const [lockedItems, setLockedItems] = useState<Set<string>>(new Set())
   const [dialogItem, setDialogItem] = useState<MenuItem | ComboItem | null>(null)
+  const [showCartReview, setShowCartReview] = useState(false)
+  const [showOrderSuccess, setShowOrderSuccess] = useState(false)
+
+  const dialogItemRef = useRef(dialogItem)
+  useEffect(() => { dialogItemRef.current = dialogItem }, [dialogItem])
 
   const selectedCode = selectedItem && isMenuItem(selectedItem) ? selectedItem.code : null
 
   const setQuantity = useCallback((code: string, qty: number) => {
-    setCart(prev => {
-      if (qty <= 0) {
-        const next = { ...prev }
-        delete next[code]
-        return next
-      }
-      return { ...prev, [code]: qty }
-    })
+    setCart(prev => ({ ...prev, [code]: Math.max(0, qty) }))
   }, [])
 
   const totalItems = useMemo(
@@ -37,15 +38,33 @@ export default function App() {
   )
 
   const handleAddToCart = useCallback((item: MenuItem | ComboItem) => {
+    if (lockedItems.has(item.code)) return
     setCart(prev => ({ ...prev, [item.code]: (prev[item.code] ?? 0) + 1 }))
     setDialogItem(item)
-  }, [])
+  }, [lockedItems])
 
   const handleCancel = useCallback(() => {
-    if (!dialogItem) return
-    setQuantity(dialogItem.code, 0)
+    const item = dialogItemRef.current
+    if (!item) return
+    setQuantity(item.code, 0)
     setDialogItem(null)
-  }, [dialogItem, setQuantity])
+  }, [setQuantity])
+
+  const handleSubmit = useCallback(() => {
+    setLockedItems(prev => {
+      const next = new Set(prev)
+      for (const [code, qty] of Object.entries(cart)) {
+        if (qty > 0) next.add(code)
+      }
+      return next
+    })
+    setShowCartReview(false)
+    setShowOrderSuccess(true)
+  }, [cart])
+
+  const handleContinueOrdering = useCallback(() => {
+    setShowOrderSuccess(false)
+  }, [])
 
   const dialogQuantity = dialogItem ? (cart[dialogItem.code] ?? 0) : 0
 
@@ -62,7 +81,11 @@ export default function App() {
           bgcolor: '#FFFCF7',
         }}
       >
-        <TopBar totalItems={totalItems} totalPrice={totalPrice} />
+        <TopBar
+          totalItems={totalItems}
+          totalPrice={totalPrice}
+          onCartClick={() => setShowCartReview(true)}
+        />
         <Box sx={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
           <MenuPanel
             onSelectItem={setSelectedItem}
@@ -80,6 +103,21 @@ export default function App() {
           onCancel={handleCancel}
           onClose={() => setDialogItem(null)}
         />
+      )}
+
+      {showCartReview && (
+        <CartReview
+          cart={cart}
+          allItems={allItems}
+          lockedItems={lockedItems}
+          onSetQuantity={setQuantity}
+          onSubmit={handleSubmit}
+          onClose={() => setShowCartReview(false)}
+        />
+      )}
+
+      {showOrderSuccess && (
+        <OrderSuccessDialog onContinue={handleContinueOrdering} />
       )}
     </ThemeProvider>
   )

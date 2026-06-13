@@ -4,7 +4,7 @@ import {
 } from '@mui/material'
 import RemoveIcon from '@mui/icons-material/Remove'
 import AddIcon from '@mui/icons-material/Add'
-import { colors } from '../theme'
+import { colors, dialogPaperSx } from '../theme'
 import type { MenuItem, ComboItem } from '../data/menuData'
 
 interface Props {
@@ -16,6 +16,8 @@ interface Props {
 }
 
 export default function CartDialog({ item, quantity, onSetQuantity, onCancel, onClose }: Props) {
+  const removed = quantity === 0
+
   return (
     <Dialog
       open
@@ -24,10 +26,7 @@ export default function CartDialog({ item, quantity, onSetQuantity, onCancel, on
       fullWidth
       slotProps={{
         paper: {
-          sx: {
-            borderRadius: 3,
-            boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
-          },
+          sx: { ...dialogPaperSx },
         },
       }}
     >
@@ -41,16 +40,24 @@ export default function CartDialog({ item, quantity, onSetQuantity, onCancel, on
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2, py: 2 }}>
           <IconButton
             onClick={() => onSetQuantity(item.code, quantity - 1)}
+            disabled={removed}
             sx={{
               bgcolor: colors.hover,
               '&:hover': { bgcolor: colors.border },
+              '&.Mui-disabled': { bgcolor: colors.hover, opacity: 0.4 },
             }}
           >
             <RemoveIcon />
           </IconButton>
-          <Typography sx={{ fontSize: 28, fontWeight: 700, minWidth: 48, textAlign: 'center', color: colors.brownDark }}>
-            {quantity}
-          </Typography>
+          {removed ? (
+            <Typography sx={{ fontSize: 18, fontWeight: 500, minWidth: 48, textAlign: 'center', color: colors.mutedText }}>
+              已移除
+            </Typography>
+          ) : (
+            <Typography sx={{ fontSize: 28, fontWeight: 700, minWidth: 48, textAlign: 'center', color: colors.brownDark }}>
+              {quantity}
+            </Typography>
+          )}
           <IconButton
             onClick={() => onSetQuantity(item.code, quantity + 1)}
             sx={{
@@ -61,7 +68,12 @@ export default function CartDialog({ item, quantity, onSetQuantity, onCancel, on
             <AddIcon />
           </IconButton>
         </Box>
-        <Typography sx={{ textAlign: 'center', fontSize: 16, color: colors.red, fontWeight: 700 }}>
+        <Typography
+          sx={{
+            textAlign: 'center', fontSize: 16, fontWeight: 700,
+            color: removed ? colors.mutedText : colors.red,
+          }}
+        >
           小計：${(item.price * quantity).toLocaleString()}
         </Typography>
       </DialogContent>

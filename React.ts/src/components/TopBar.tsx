@@ -5,9 +5,10 @@ import { colors } from '../theme'
 interface Props {
   totalItems: number
   totalPrice: number
+  onCartClick: () => void
 }
 
-export default function TopBar({ totalItems, totalPrice }: Props) {
+export default function TopBar({ totalItems, totalPrice, onCartClick }: Props) {
   return (
     <Box
       sx={{
@@ -17,7 +18,7 @@ export default function TopBar({ totalItems, totalPrice }: Props) {
         px: 3,
         bgcolor: colors.brown,
         color: colors.beige,
-        borderBottom: '1px solid rgba(245, 237, 227, 0.08)',
+        borderBottom: `1px solid ${colors.beige08}`,
         flexShrink: 0,
       }}
     >
@@ -45,9 +46,9 @@ export default function TopBar({ totalItems, totalPrice }: Props) {
         <Divider
           orientation="vertical"
           flexItem
-          sx={{ height: 28, borderColor: 'rgba(245, 237, 227, 0.2)', my: 'auto' }}
+          sx={{ height: 28, borderColor: colors.beige20, my: 'auto' }}
         />
-        <IconButton sx={{ color: colors.beige }}>
+        <IconButton onClick={onCartClick} sx={{ color: colors.beige }}>
           <Badge
             badgeContent={totalItems}
             color="error"
